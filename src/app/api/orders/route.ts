@@ -2,6 +2,12 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 
 type RequestItem = { product_id?: string; quantity?: number }
+type SupabaseOrderError = {
+  code?: string
+  message?: string
+  details?: string | null
+  hint?: string | null
+}
 
 const friendlyErrors: Record<string, string> = {
   invalid_customer_name: 'Please enter a valid full name.',
@@ -13,9 +19,37 @@ const friendlyErrors: Record<string, string> = {
   product_unavailable: 'One of the selected products is no longer available. Please update your cart.',
 }
 
-function parseDatabaseError(message: string) {
-  const key = Object.keys(friendlyErrors).find((code) => message.includes(code))
-  return key ? friendlyErrors[key] : 'We could not place your order right now. Please try again.'
+function parseDatabaseError(error: SupabaseOrderError) {
+  const message = error.message || ''
+  const details = error.details || ''
+  const hint = error.hint || ''
+  const combined = `${message} ${details} ${hint}`
+
+  const customKey = Object.keys(friendlyErrors).find((code) => combined.includes(code))
+  if (customKey) return friendlyErrors[customKey]
+
+  if (
+    error.code === 'PGRST202' ||
+    error.code === '42883' ||
+    combined.toLowerCase().includes('could not find the function') ||
+    combined.toLowerCase().includes('function public.create_store_order')
+  ) {
+    return 'Ordering is temporarily unavailable because the database order setup is incomplete. Please contact the store.'
+  }
+
+  if (error.code === '42P01' || combined.toLowerCase().includes('relation') && combined.toLowerCase().includes('does not exist')) {
+    return 'Ordering is temporarily unavailable because the database order setup is incomplete. Please contact the store.'
+  }
+
+  if (error.code === '42501' || combined.toLowerCase().includes('permission denied')) {
+    return 'Ordering is temporarily unavailable because of a database permission issue. Please contact the store.'
+  }
+
+  if (error.code === '22P02' || combined.toLowerCase().includes('invalid input syntax for type uuid')) {
+    return 'One of the cart products is invalid. Please remove it and add it again.'
+  }
+
+  return 'We could not place your order right now. Please try again.'
 }
 
 export async function POST(request: Request) {
@@ -28,7 +62,18 @@ export async function POST(request: Request) {
       quantity: Number(item.quantity || 0),
     }))
 
+    const logPayload = {
+      itemCount: cartItems.length,
+      items: cartItems,
+      hasCustomerName: Boolean(String(body.customer_name || '').trim()),
+      hasCustomerPhone: Boolean(String(body.customer_phone || '').trim()),
+      hasDeliveryAddress: Boolean(String(body.delivery_address || '').trim()),
+      hasCustomerEmail: Boolean(String(body.customer_email || '').trim()),
+      hasNotes: Boolean(String(body.notes || '').trim()),
+    }
+
     if (cartItems.length === 0) {
+      console.warn('Order rejected before RPC: empty cart', logPayload)
       return NextResponse.json({ error: 'Your cart is empty.' }, { status: 400 })
     }
 
@@ -43,9 +88,34 @@ export async function POST(request: Request) {
     })
 
     if (error) {
-      console.error('Order RPC error:', error)
-      return NextResponse.json({ error: parseDatabaseError(error.message) }, { status: 400 })
+      console.error('Order RPC error', {
+        code: error.code,
+        message: error.message,
+        details: error.details,
+        hint: error.hint,
+        payload: logPayload,
+      })
+
+      const responseBody: { error: string; debug?: SupabaseOrderError } = {
+        error: parseDatabaseError(error),
+      }
+
+      if (process.env.NODE_ENV !== 'production') {
+        responseBody.debug = {
+          code: error.code,
+          message: error.message,
+          details: error.details,
+          hint: error.hint,
+        }
+      }
+
+      return NextResponse.json(responseBody, { status: 400 })
     }
+
+    console.info('Order created successfully', {
+      orderId: typeof data === 'object' && data && 'id' in data ? data.id : undefined,
+      itemCount: cartItems.length,
+    })
 
     return NextResponse.json({ order: data })
   } catch (error) {
