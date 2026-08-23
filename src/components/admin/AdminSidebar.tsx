@@ -8,6 +8,7 @@ import {
   LayoutDashboard,
   Package,
   Layers,
+  ShoppingBag,
   Store,
   LogOut,
   PlusCircle,
@@ -47,6 +48,12 @@ export function AdminSidebar() {
       label: 'Categories',
       href: '/admin/categories',
       icon: Layers,
+      exact: false,
+    },
+    {
+      label: 'Orders',
+      href: '/admin/orders',
+      icon: ShoppingBag,
       exact: false,
     },
   ]

@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Store, ShoppingBag, Menu, X, Shield, Search } from 'lucide-react'
+import { Store, Menu, X, Shield, Search } from 'lucide-react'
+import { CartBadge } from '@/components/cart/CartBadge'
 
 export function StoreNavbar() {
   const pathname = usePathname()
@@ -21,6 +22,7 @@ export function StoreNavbar() {
   const navLinks = [
     { label: 'Home', href: '/' },
     { label: 'All Products', href: '/products' },
+    { label: 'Cart', href: '/cart' },
   ]
 
   return (
@@ -81,9 +83,11 @@ export function StoreNavbar() {
               <Search className="w-5 h-5" />
             </Link>
 
+            <CartBadge />
+
             <Link
               href="/admin"
-              className="inline-flex items-center gap-2 px-3.5 py-2 text-xs sm:text-sm font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200/90 rounded-xl transition-all border border-slate-200/60 shadow-sm"
+              className="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 text-xs sm:text-sm font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200/90 rounded-xl transition-all border border-slate-200/60 shadow-sm"
             >
               <Shield className="w-4 h-4 text-amber-600" />
               <span>Admin Portal</span>

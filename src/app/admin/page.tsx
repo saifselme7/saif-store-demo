@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { createClient } from '@/lib/supabase/server'
 import { AdminHeader } from '@/components/admin/AdminHeader'
 import { StatsCard } from '@/components/admin/StatsCard'
-import { Product, Category } from '@/types/database'
+import { Product, Category, Order } from '@/types/database'
 import { formatPrice, formatDate } from '@/lib/utils'
 import {
   Package,
@@ -16,6 +16,8 @@ import {
   TrendingUp,
   Store,
   Edit,
+  ShoppingBag,
+  Clock3,
 } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
@@ -37,13 +39,25 @@ export default async function AdminDashboardPage() {
     .from('categories')
     .select('*')
 
+  // Fetch real order statistics (returns empty before the order migration is applied)
+  const { data: ordersData } = await supabase
+    .from('orders')
+    .select('*')
+    .order('created_at', { ascending: false })
+
   const products = (productsData as unknown as Product[]) || []
   const categories = (categoriesData as Category[]) || []
+  const orders = (ordersData as Order[]) || []
 
   const totalProducts = products.length
   const availableProducts = products.filter((p) => p.is_available).length
   const unavailableProducts = totalProducts - availableProducts
   const totalCategories = categories.length
+  const totalOrders = orders.length
+  const pendingOrders = orders.filter((order) => order.status === 'pending').length
+  const completedOrders = orders.filter((order) => order.status === 'completed').length
+  const todayKey = new Date().toISOString().slice(0, 10)
+  const todaysOrders = orders.filter((order) => order.created_at?.slice(0, 10) === todayKey).length
 
   const recentProducts = products.slice(0, 5)
 
@@ -93,6 +107,38 @@ export default async function AdminDashboardPage() {
             subtitle="Active classifications"
             icon={Layers}
             colorScheme="blue"
+          />
+        </div>
+
+        {/* Order Statistics Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <StatsCard
+            title="Total Orders"
+            value={totalOrders}
+            subtitle="Real orders in Supabase"
+            icon={ShoppingBag}
+            colorScheme="amber"
+          />
+          <StatsCard
+            title="Pending Orders"
+            value={pendingOrders}
+            subtitle="Waiting for confirmation"
+            icon={Clock3}
+            colorScheme="red"
+          />
+          <StatsCard
+            title="Today's Orders"
+            value={todaysOrders}
+            subtitle="Created today"
+            icon={TrendingUp}
+            colorScheme="blue"
+          />
+          <StatsCard
+            title="Completed Orders"
+            value={completedOrders}
+            subtitle="Fulfilled successfully"
+            icon={CheckCircle2}
+            colorScheme="emerald"
           />
         </div>
 

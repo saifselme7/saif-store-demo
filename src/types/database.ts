@@ -24,6 +24,37 @@ export interface Category {
   updated_at?: string
 }
 
+
+export type OrderStatus = 'pending' | 'confirmed' | 'preparing' | 'ready' | 'completed' | 'cancelled'
+
+export interface Order {
+  id: string
+  customer_id: string | null
+  public_token?: string
+  customer_name: string
+  customer_phone: string
+  customer_email: string | null
+  delivery_address: string
+  notes: string | null
+  subtotal: number
+  total: number
+  status: OrderStatus
+  created_at: string
+  updated_at: string
+  order_items?: OrderItem[]
+}
+
+export interface OrderItem {
+  id: string
+  order_id: string
+  product_id: string | null
+  product_name: string
+  quantity: number
+  unit_price: number
+  subtotal: number
+  created_at: string
+}
+
 export interface Product {
   id: string
   category_id: string | null
@@ -110,6 +141,64 @@ export type Database = {
           }
         ]
       }
+      orders: {
+        Row: Order
+        Insert: {
+          id?: string
+          customer_id?: string | null
+          public_token?: string
+          customer_name: string
+          customer_phone: string
+          customer_email?: string | null
+          delivery_address: string
+          notes?: string | null
+          subtotal: number
+          total: number
+          status?: OrderStatus
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          customer_id?: string | null
+          public_token?: string
+          customer_name?: string
+          customer_phone?: string
+          customer_email?: string | null
+          delivery_address?: string
+          notes?: string | null
+          subtotal?: number
+          total?: number
+          status?: OrderStatus
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      order_items: {
+        Row: OrderItem
+        Insert: {
+          id?: string
+          order_id: string
+          product_id?: string | null
+          product_name: string
+          quantity: number
+          unit_price: number
+          subtotal: number
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          order_id?: string
+          product_id?: string | null
+          product_name?: string
+          quantity?: number
+          unit_price?: number
+          subtotal?: number
+          created_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: Profile
         Insert: {
@@ -133,7 +222,24 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      create_store_order: {
+        Args: {
+          customer_name: string
+          customer_phone: string
+          customer_email: string | null
+          delivery_address: string
+          notes: string | null
+          cart_items: Json
+        }
+        Returns: Json
+      }
+      get_order_tracking: {
+        Args: {
+          order_id: string
+          order_token: string
+        }
+        Returns: Json
+      }
     }
     Enums: {
       [_ in never]: never

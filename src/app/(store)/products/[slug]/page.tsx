@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { ProductCard } from '@/components/store/ProductCard'
+import { AddToCartButton } from '@/components/cart/AddToCartButton'
 import { Product } from '@/types/database'
 import { formatPrice, formatDate } from '@/lib/utils'
 import {
@@ -137,6 +138,8 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
                 </p>
               </div>
             </div>
+
+            <AddToCartButton product={product} />
 
             {/* Live Database Info Card */}
             <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2 text-xs text-slate-500">

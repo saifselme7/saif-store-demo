@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { Product } from '@/types/database'
 import { formatPrice } from '@/lib/utils'
 import { ArrowRight, CheckCircle2, XCircle } from 'lucide-react'
+import { AddToCartButton } from '@/components/cart/AddToCartButton'
 
 interface ProductCardProps {
   product: Product
@@ -69,13 +70,16 @@ export function ProductCard({ product }: ProductCardProps) {
             </span>
           </div>
 
-          <Link
-            href={`/products/${product.slug}`}
-            className="inline-flex items-center gap-1 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-amber-50 text-amber-800 hover:bg-amber-100 group-hover:bg-amber-600 group-hover:text-white transition-all shadow-sm"
-          >
-            <span>View Details</span>
-            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-          </Link>
+          <div className="flex items-center gap-2">
+            <AddToCartButton product={product} compact />
+            <Link
+              href={`/products/${product.slug}`}
+              className="inline-flex items-center gap-1 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-amber-50 text-amber-800 hover:bg-amber-100 group-hover:bg-amber-600 group-hover:text-white transition-all shadow-sm"
+            >
+              <span>Details</span>
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+            </Link>
+          </div>
         </div>
       </div>
     </div>
