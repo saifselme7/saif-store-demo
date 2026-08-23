@@ -87,14 +87,14 @@ export function ProductListTable({
       )
       setFeedback({
         type: 'success',
-        message: `"${product.name}" marked as ${newStatus ? 'Available' : 'Out of Stock'}.`,
+        message: `"${product.name}" اتغيرت حالته إلى ${newStatus ? 'Available' : 'Out of Stock'}.`,
       })
       router.refresh()
     } catch (err: any) {
       console.error('Toggle error:', err)
       setFeedback({
         type: 'error',
-        message: err.message || 'Failed to update product status.',
+        message: err.message || 'معرفناش نحدّث حالة المنتج.',
       })
     } finally {
       setTogglingId(null)
@@ -120,7 +120,7 @@ export function ProductListTable({
       setProducts((prev) => prev.filter((p) => p.id !== productToDelete.id))
       setFeedback({
         type: 'success',
-        message: `Product "${productToDelete.name}" deleted successfully.`,
+        message: `المنتج "${productToDelete.name}" اتحذف بنجاح.`,
       })
       setProductToDelete(null)
       router.refresh()
@@ -128,7 +128,7 @@ export function ProductListTable({
       console.error('Delete error:', err)
       setFeedback({
         type: 'error',
-        message: err.message || 'Failed to delete product from database.',
+        message: err.message || 'معرفناش نحذف المنتج من الداتابيز.',
       })
     } finally {
       setIsDeleting(false)
@@ -175,8 +175,8 @@ export function ProductListTable({
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search products..."
-            className="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm bg-slate-50/50"
+            placeholder="دور في المنتجات..."
+            className="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-neutral-500 text-sm bg-slate-50/50"
           />
         </div>
 
@@ -186,9 +186,9 @@ export function ProductListTable({
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="px-3 py-2 rounded-xl border border-slate-200 bg-slate-50/50 text-xs sm:text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-amber-500"
+            className="px-3 py-2 rounded-xl border border-slate-200 bg-slate-50/50 text-xs sm:text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-neutral-500"
           >
-            <option value="all">All Categories</option>
+            <option value="all">كل الأقسام</option>
             {categories.map((cat) => (
               <option key={cat.id} value={cat.id}>
                 {cat.name}
@@ -200,20 +200,20 @@ export function ProductListTable({
           <select
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value)}
-            className="px-3 py-2 rounded-xl border border-slate-200 bg-slate-50/50 text-xs sm:text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-amber-500"
+            className="px-3 py-2 rounded-xl border border-slate-200 bg-slate-50/50 text-xs sm:text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-neutral-500"
           >
-            <option value="all">All Statuses</option>
-            <option value="available">Available Only</option>
-            <option value="unavailable">Out of Stock Only</option>
+            <option value="all">كل الحالات</option>
+            <option value="available">المتاح فقط</option>
+            <option value="unavailable">غير المتاح فقط</option>
           </select>
 
           {/* Add product button */}
           <Link
             href="/admin/products/new"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs sm:text-sm transition-all shadow-sm shadow-amber-500/20 ml-auto md:ml-0"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-neutral-500 hover:bg-neutral-400 text-slate-950 font-bold text-xs sm:text-sm transition-all shadow-sm shadow-neutral-500/20 ml-auto md:ml-0"
           >
             <PlusCircle className="w-4 h-4" />
-            <span>Add Product</span>
+            <span>إضافة منتج</span>
           </Link>
         </div>
       </div>
@@ -224,12 +224,12 @@ export function ProductListTable({
           <table className="w-full text-left text-sm text-slate-600">
             <thead className="bg-slate-50/75 text-[11px] uppercase tracking-wider text-slate-500 font-bold border-b border-slate-100">
               <tr>
-                <th scope="col" className="px-6 py-3.5">Product</th>
-                <th scope="col" className="px-6 py-3.5">Category</th>
-                <th scope="col" className="px-6 py-3.5">Price</th>
-                <th scope="col" className="px-6 py-3.5">Availability Toggle</th>
-                <th scope="col" className="px-6 py-3.5">Last Updated</th>
-                <th scope="col" className="px-6 py-3.5 text-right">Actions</th>
+                <th scope="col" className="px-6 py-3.5">المنتج</th>
+                <th scope="col" className="px-6 py-3.5">القسم</th>
+                <th scope="col" className="px-6 py-3.5">السعر</th>
+                <th scope="col" className="px-6 py-3.5">تغيير التوافر</th>
+                <th scope="col" className="px-6 py-3.5">آخر تحديث</th>
+                <th scope="col" className="px-6 py-3.5 text-right">إجراءات</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -266,7 +266,7 @@ export function ProductListTable({
                           {product.category.name}
                         </span>
                       ) : (
-                        <span className="text-xs text-slate-400 italic">Uncategorized</span>
+                        <span className="text-xs text-slate-400 italic">بدون قسم</span>
                       )}
                     </td>
 
@@ -300,9 +300,9 @@ export function ProductListTable({
                               <Loader2 className="w-3 h-3 animate-spin" /> Saving...
                             </span>
                           ) : product.is_available ? (
-                            <span className="text-emerald-700">Available</span>
+                            <span className="text-emerald-700">متاح</span>
                           ) : (
-                            <span className="text-red-600">Out of Stock</span>
+                            <span className="text-red-600">غير متاح</span>
                           )}
                         </span>
                       </div>
@@ -319,7 +319,7 @@ export function ProductListTable({
                         <Link
                           href={`/products/${product.slug}`}
                           target="_blank"
-                          title="View on store"
+                          title="عرض في المتجر"
                           className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
                         >
                           <ExternalLink className="w-4 h-4" />
@@ -327,8 +327,8 @@ export function ProductListTable({
 
                         <Link
                           href={`/admin/products/${product.id}/edit`}
-                          title="Edit product"
-                          className="p-1.5 text-amber-600 hover:text-amber-700 hover:bg-amber-50 rounded-lg transition-colors"
+                          title="تعديل المنتج"
+                          className="p-1.5 text-neutral-600 hover:text-neutral-700 hover:bg-neutral-50 rounded-lg transition-colors"
                         >
                           <Edit className="w-4 h-4" />
                         </Link>
@@ -336,7 +336,7 @@ export function ProductListTable({
                         <button
                           type="button"
                           onClick={() => setProductToDelete(product)}
-                          title="Delete product"
+                          title="حذف المنتج"
                           className="p-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -362,7 +362,7 @@ export function ProductListTable({
         isOpen={Boolean(productToDelete)}
         onClose={() => setProductToDelete(null)}
         onConfirm={handleDeleteProduct}
-        title="Confirm Product Deletion"
+        title="تأكيد حذف المنتج"
         message="Are you sure you want to permanently delete this product from the Supabase database?"
         itemName={productToDelete?.name}
         isLoading={isDeleting}

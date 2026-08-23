@@ -14,16 +14,14 @@ export function CheckoutForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const update = (field: keyof typeof form) => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setForm((previous) => ({ ...previous, [field]: event.target.value }))
-  }
+  const update = (field: keyof typeof form) => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setForm((previous) => ({ ...previous, [field]: event.target.value }))
 
   const validate = () => {
-    if (items.length === 0) return 'Your cart is empty.'
-    if (form.customer_name.trim().length < 2) return 'Please enter your full name.'
-    if (form.customer_phone.trim().length < 7) return 'Please enter a valid phone number.'
-    if (form.delivery_address.trim().length < 5) return 'Please enter your delivery address.'
-    if (form.customer_email && !/^\S+@\S+\.\S+$/.test(form.customer_email.trim())) return 'Please enter a valid email address or leave it empty.'
+    if (items.length === 0) return 'سلتك فاضية. ضيف منتج الأول.'
+    if (form.customer_name.trim().length < 2) return 'اكتب اسمك بالكامل.'
+    if (form.customer_phone.trim().length < 7) return 'اكتب رقم موبايل صحيح.'
+    if (form.delivery_address.trim().length < 5) return 'اكتب عنوان التوصيل بوضوح.'
+    if (form.customer_email && !/^\S+@\S+\.\S+$/.test(form.customer_email.trim())) return 'الإيميل مش واضح. اكتبه صح أو سيبه فاضي.'
     return null
   }
 
@@ -31,30 +29,22 @@ export function CheckoutForm() {
     event.preventDefault()
     setError(null)
     const validationError = validate()
-    if (validationError) {
-      setError(validationError)
-      return
-    }
+    if (validationError) return setError(validationError)
 
     setIsSubmitting(true)
     try {
       const response = await fetch('/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...form,
-          items: items.map((item) => ({ product_id: item.product_id, quantity: item.quantity })),
-        }),
+        body: JSON.stringify({ ...form, items: items.map((item) => ({ product_id: item.product_id, quantity: item.quantity })) }),
       })
       const result = await response.json()
-      if (!response.ok) throw new Error(result.error || 'Failed to place order.')
+      if (!response.ok) throw new Error(result.error || 'معرفناش نأكد الطلب دلوقتي. حاول تاني.')
 
       clearCart()
-      const orderId = result.order.id
-      const token = result.order.public_token
-      router.push(`/orders/${orderId}?token=${token}`)
+      router.push(`/orders/${result.order.id}?token=${result.order.public_token}`)
     } catch (err: any) {
-      setError(err.message || 'Failed to place order. Please try again.')
+      setError(err.message || 'معرفناش نأكد الطلب دلوقتي. حاول تاني.')
     } finally {
       setIsSubmitting(false)
     }
@@ -62,56 +52,32 @@ export function CheckoutForm() {
 
   return (
     <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-[1fr_420px] gap-8 items-start">
-      <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm p-5 sm:p-7 space-y-5">
+      <div className="bg-white rounded-[2rem] border border-neutral-200 shadow-sm p-5 sm:p-7 space-y-5">
         <div>
-          <h2 className="text-xl font-black text-slate-900">Delivery Information</h2>
-          <p className="text-sm text-slate-500 mt-1">We will use these details to confirm and deliver your order.</p>
+          <p className="editorial-label">بيانات التوصيل</p>
+          <h2 className="text-2xl font-black text-neutral-950 mt-2">اكتب بياناتك</h2>
+          <p className="text-sm text-neutral-500 mt-1 leading-7">اكتب بياناتك عشان نأكد طلبك ونوصلهولك.</p>
         </div>
 
-        {error && (
-          <div className="p-4 rounded-xl bg-red-50 border border-red-200 text-red-800 text-sm flex items-start gap-2">
-            <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
-            <span>{error}</span>
-          </div>
-        )}
+        {error && <div className="p-4 rounded-2xl bg-red-50 border border-red-200 text-red-800 text-sm flex items-start gap-2"><AlertCircle className="w-4 h-4 mt-0.5 shrink-0" /><span>{error}</span></div>}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <label className="space-y-1.5">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Full name *</span>
-            <input value={form.customer_name} onChange={update('customer_name')} required className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm" placeholder="Ahmed Mohamed" />
-          </label>
-          <label className="space-y-1.5">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Phone number *</span>
-            <input value={form.customer_phone} onChange={update('customer_phone')} required className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm" placeholder="010XXXXXXXX" />
-          </label>
+          <label className="space-y-1.5"><span className="text-xs font-black text-neutral-500">الاسم بالكامل *</span><input value={form.customer_name} onChange={update('customer_name')} required className="w-full px-4 py-3 rounded-2xl border border-neutral-200 focus:outline-none focus:ring-2 focus:ring-neutral-950 text-sm" placeholder="أحمد محمد" /></label>
+          <label className="space-y-1.5"><span className="text-xs font-black text-neutral-500">رقم الموبايل *</span><input dir="ltr" value={form.customer_phone} onChange={update('customer_phone')} required className="w-full px-4 py-3 rounded-2xl border border-neutral-200 focus:outline-none focus:ring-2 focus:ring-neutral-950 text-sm" placeholder="010XXXXXXXX" /></label>
         </div>
+        <label className="block space-y-1.5"><span className="text-xs font-black text-neutral-500">الإيميل (اختياري)</span><input type="email" value={form.customer_email} onChange={update('customer_email')} className="w-full px-4 py-3 rounded-2xl border border-neutral-200 focus:outline-none focus:ring-2 focus:ring-neutral-950 text-sm" placeholder="customer@example.com" /></label>
+        <label className="block space-y-1.5"><span className="text-xs font-black text-neutral-500">عنوان التوصيل *</span><textarea value={form.delivery_address} onChange={update('delivery_address')} required rows={4} className="w-full px-4 py-3 rounded-2xl border border-neutral-200 focus:outline-none focus:ring-2 focus:ring-neutral-950 text-sm" placeholder="العمارة، الشارع، المنطقة، المدينة" /></label>
+        <label className="block space-y-1.5"><span className="text-xs font-black text-neutral-500">ملاحظات</span><textarea value={form.notes} onChange={update('notes')} rows={3} className="w-full px-4 py-3 rounded-2xl border border-neutral-200 focus:outline-none focus:ring-2 focus:ring-neutral-950 text-sm" placeholder="أي تعليمات خاصة؟" /></label>
 
-        <label className="block space-y-1.5">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Email address (optional)</span>
-          <input type="email" value={form.customer_email} onChange={update('customer_email')} className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm" placeholder="customer@example.com" />
-        </label>
-
-        <label className="block space-y-1.5">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Delivery address *</span>
-          <textarea value={form.delivery_address} onChange={update('delivery_address')} required rows={4} className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm" placeholder="Building, street, area, city" />
-        </label>
-
-        <label className="block space-y-1.5">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Notes</span>
-          <textarea value={form.notes} onChange={update('notes')} rows={3} className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm" placeholder="Any special instructions?" />
-        </label>
-
-        <div className="rounded-2xl bg-amber-50 border border-amber-200/70 p-4 text-sm text-amber-900 flex gap-3">
-          <ShieldCheck className="w-5 h-5 shrink-0 text-amber-700" />
-          <p>Prices and availability are verified securely from Supabase when you place the order. Browser totals cannot change the charged amount.</p>
-        </div>
+        <div className="rounded-2xl bg-neutral-50 border border-neutral-200 p-4 text-sm text-neutral-700 flex gap-3 leading-7"><ShieldCheck className="w-5 h-5 shrink-0 text-neutral-950" /><p>الأسعار والتوافر بيتأكدوا من الداتابيز وقت الطلب. أي تعديل من المتصفح مش هيغير الإجمالي الحقيقي.</p></div>
       </div>
 
       <aside className="space-y-5 lg:sticky lg:top-24">
+        <div className="mb-2"><p className="editorial-label">ملخص الطلب</p></div>
         <CartContents checkoutMode />
-        <button type="submit" disabled={isSubmitting || items.length === 0} className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-sm transition-all shadow-md shadow-amber-500/20 disabled:opacity-60 disabled:cursor-not-allowed">
+        <button type="submit" disabled={isSubmitting || items.length === 0} className="w-full luxury-button px-6 py-4 text-sm disabled:opacity-60 disabled:cursor-not-allowed">
           {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : null}
-          <span>{isSubmitting ? 'Placing order...' : `Place Order • ${formatPrice(subtotal)}`}</span>
+          <span>{isSubmitting ? 'بنأكد الطلب...' : `أكد الطلب • ${formatPrice(subtotal)}`}</span>
         </button>
       </aside>
     </form>

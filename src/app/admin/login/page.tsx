@@ -72,23 +72,23 @@ export default function AdminLoginPage() {
         {/* Back Link */}
         <Link
           href="/"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-400 hover:text-amber-400 transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-400 hover:text-neutral-400 transition-colors"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
-          <span>Back to Public Store</span>
+          <span>رجوع للمتجر</span>
         </Link>
 
         {/* Brand Header */}
         <div className="text-center space-y-3 pt-2">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center text-slate-950 mx-auto shadow-lg shadow-amber-500/25">
+          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-neutral-500 to-neutral-700 flex items-center justify-center text-slate-950 mx-auto shadow-lg shadow-neutral-500/25">
             <Store className="w-7 h-7" />
           </div>
           <div>
             <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
-              Admin Portal
+              لوحة التحكم
             </h2>
             <p className="text-xs sm:text-sm text-slate-400 mt-1">
-              Sign in to manage <span className="font-semibold text-amber-400">SAIF STORE</span> inventory & database.
+              سجل دخول لإدارة <span className="font-semibold text-neutral-400">SAIF STORE</span> المنتجات والداتابيز.
             </p>
           </div>
         </div>
@@ -112,7 +112,7 @@ export default function AdminLoginPage() {
         <form onSubmit={handleLogin} className="space-y-4">
           <div className="space-y-1.5">
             <label className="block text-xs font-bold uppercase tracking-wider text-slate-300">
-              Email Address
+              الإيميل
             </label>
             <div className="relative">
               <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
@@ -122,14 +122,14 @@ export default function AdminLoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="admin@saifstore.com"
                 required
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-800/80 border border-slate-700 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 text-white text-sm placeholder:text-slate-500"
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-800/80 border border-slate-700 focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500 text-white text-sm placeholder:text-slate-500"
               />
             </div>
           </div>
 
           <div className="space-y-1.5">
             <label className="block text-xs font-bold uppercase tracking-wider text-slate-300">
-              Password
+              الباسورد
             </label>
             <div className="relative">
               <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
@@ -139,7 +139,7 @@ export default function AdminLoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 required
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-800/80 border border-slate-700 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 text-white text-sm placeholder:text-slate-500"
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-800/80 border border-slate-700 focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500 text-white text-sm placeholder:text-slate-500"
               />
             </div>
           </div>
@@ -147,15 +147,15 @@ export default function AdminLoginPage() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm transition-all shadow-md shadow-amber-500/20 disabled:opacity-50 mt-2"
+            className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-neutral-500 hover:bg-neutral-400 text-slate-950 font-bold text-sm transition-all shadow-md shadow-neutral-500/20 disabled:opacity-50 mt-2"
           >
             {isSubmitting ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
-                <span>Authenticating with Supabase...</span>
+                <span>بنسجل الدخول...</span>
               </>
             ) : (
-              <span>{isSigningUp ? 'Create Admin Account' : 'Sign In to Dashboard'}</span>
+              <span>{isSigningUp ? 'إنشاء حساب مدير' : 'دخول لوحة التحكم'}</span>
             )}
           </button>
         </form>
@@ -169,17 +169,17 @@ export default function AdminLoginPage() {
               setErrorMessage(null)
               setInfoMessage(null)
             }}
-            className="text-xs text-slate-400 hover:text-amber-400 transition-colors"
+            className="text-xs text-slate-400 hover:text-neutral-400 transition-colors"
           >
             {isSigningUp
-              ? 'Already have an admin account? Sign In'
-              : 'Need a new admin account for testing? Create One'}
+              ? 'عندك حساب مدير؟ سجل دخول'
+              : 'محتاج حساب مدير للتجربة؟ اعمل حساب'}
           </button>
         </div>
 
         {/* Security explanation note for learning */}
         <div className="p-3.5 rounded-xl bg-slate-800/40 border border-slate-800 text-[11px] text-slate-400 space-y-1">
-          <p className="font-semibold text-amber-400/90 flex items-center gap-1.5">
+          <p className="font-semibold text-neutral-400/90 flex items-center gap-1.5">
             <KeyRound className="w-3.5 h-3.5" />
             Supabase Auth Security Flow
           </p>

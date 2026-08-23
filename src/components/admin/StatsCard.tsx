@@ -6,7 +6,7 @@ interface StatsCardProps {
   value: string | number
   subtitle?: string
   icon: LucideIcon
-  colorScheme?: 'amber' | 'emerald' | 'blue' | 'purple' | 'red'
+  colorScheme?: 'neutral' | 'emerald' | 'blue' | 'purple' | 'red'
 }
 
 export function StatsCard({
@@ -14,13 +14,13 @@ export function StatsCard({
   value,
   subtitle,
   icon: Icon,
-  colorScheme = 'amber',
+  colorScheme = 'neutral',
 }: StatsCardProps) {
   const styles = {
-    amber: {
-      bg: 'bg-amber-50',
-      text: 'text-amber-700',
-      border: 'border-amber-200/60',
+    neutral: {
+      bg: 'bg-neutral-50',
+      text: 'text-neutral-700',
+      border: 'border-neutral-200/60',
     },
     emerald: {
       bg: 'bg-emerald-50',

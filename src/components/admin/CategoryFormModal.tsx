@@ -59,7 +59,7 @@ export function CategoryFormModal({
     setError(null)
 
     if (!name.trim()) {
-      setError('Category name is required.')
+      setError('اسم القسم مطلوب.')
       return
     }
 
@@ -94,7 +94,7 @@ export function CategoryFormModal({
       onClose()
     } catch (err: any) {
       console.error('Error saving category:', err)
-      setError(err.message || 'Failed to save category in Supabase database.')
+      setError(err.message || 'معرفناش نحفظ القسم في الداتابيز.')
     } finally {
       setIsSubmitting(false)
     }
@@ -104,8 +104,8 @@ export function CategoryFormModal({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={isEditing ? 'Edit Category' : 'Create New Category'}
-      description="Organize your menu and storefront collections."
+      title={isEditing ? 'تعديل القسم' : 'قسم جديد'}
+      description="نظّم أقسام المتجر بشكل واضح."
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         {error && (
@@ -123,9 +123,9 @@ export function CategoryFormModal({
             type="text"
             value={name}
             onChange={handleNameChange}
-            placeholder="e.g. Specialty Coffees"
+            placeholder="مثال: قهوة مختصة"
             required
-            className="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm bg-slate-50/50"
+            className="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-neutral-500 text-sm bg-slate-50/50"
           />
         </div>
 
@@ -139,7 +139,7 @@ export function CategoryFormModal({
             onChange={(e) => setSlug(slugify(e.target.value))}
             placeholder="specialty-coffees"
             required
-            className="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm bg-slate-50/50 font-mono text-xs"
+            className="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-neutral-500 text-sm bg-slate-50/50 font-mono text-xs"
           />
         </div>
 
@@ -151,8 +151,8 @@ export function CategoryFormModal({
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             rows={2}
-            placeholder="Brief overview of this category"
-            className="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm bg-slate-50/50"
+            placeholder="وصف مختصر للقسم"
+            className="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-neutral-500 text-sm bg-slate-50/50"
           />
         </div>
 
@@ -165,7 +165,7 @@ export function CategoryFormModal({
             value={imageUrl}
             onChange={(e) => setImageUrl(e.target.value)}
             placeholder="https://images.unsplash.com/..."
-            className="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500 text-xs bg-slate-50/50"
+            className="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-neutral-500 text-xs bg-slate-50/50"
           />
         </div>
 
@@ -180,10 +180,10 @@ export function CategoryFormModal({
           <button
             type="submit"
             disabled={isSubmitting}
-            className="inline-flex items-center gap-2 px-5 py-2 text-xs font-bold text-white bg-amber-600 hover:bg-amber-700 rounded-xl transition-colors disabled:opacity-50 shadow-sm"
+            className="inline-flex items-center gap-2 px-5 py-2 text-xs font-bold text-white bg-neutral-600 hover:bg-neutral-700 rounded-xl transition-colors disabled:opacity-50 shadow-sm"
           >
             {isSubmitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
-            <span>{isEditing ? 'Save Changes' : 'Create Category'}</span>
+            <span>{isEditing ? 'حفظ التعديلات' : 'إنشاء القسم'}</span>
           </button>
         </div>
       </form>

@@ -10,13 +10,13 @@ type SupabaseOrderError = {
 }
 
 const friendlyErrors: Record<string, string> = {
-  invalid_customer_name: 'Please enter a valid full name.',
-  invalid_customer_phone: 'Please enter a valid phone number.',
-  invalid_delivery_address: 'Please enter a valid delivery address.',
-  empty_cart: 'Your cart is empty.',
-  invalid_product: 'One of the cart products is invalid.',
-  invalid_quantity: 'One of the item quantities is invalid.',
-  product_unavailable: 'One of the selected products is no longer available. Please update your cart.',
+  invalid_customer_name: 'اكتب اسم كامل صحيح.',
+  invalid_customer_phone: 'اكتب رقم موبايل صحيح.',
+  invalid_delivery_address: 'اكتب عنوان توصيل واضح.',
+  empty_cart: 'سلتك فاضية.',
+  invalid_product: 'في منتج في السلة مش صحيح.',
+  invalid_quantity: 'في كمية مش صحيحة في السلة.',
+  product_unavailable: 'في منتج مبقاش متاح. حدّث السلة وحاول تاني.',
 }
 
 function parseDatabaseError(error: SupabaseOrderError) {
@@ -34,22 +34,22 @@ function parseDatabaseError(error: SupabaseOrderError) {
     combined.toLowerCase().includes('could not find the function') ||
     combined.toLowerCase().includes('function public.create_store_order')
   ) {
-    return 'Ordering is temporarily unavailable because the database order setup is incomplete. Please contact the store.'
+    return 'الطلب مش متاح مؤقتًا لأن إعداد الداتابيز ناقص. كلم المتجر.'
   }
 
   if (error.code === '42P01' || combined.toLowerCase().includes('relation') && combined.toLowerCase().includes('does not exist')) {
-    return 'Ordering is temporarily unavailable because the database order setup is incomplete. Please contact the store.'
+    return 'الطلب مش متاح مؤقتًا لأن إعداد الداتابيز ناقص. كلم المتجر.'
   }
 
   if (error.code === '42501' || combined.toLowerCase().includes('permission denied')) {
-    return 'Ordering is temporarily unavailable because of a database permission issue. Please contact the store.'
+    return 'الطلب مش متاح مؤقتًا بسبب صلاحيات الداتابيز. كلم المتجر.'
   }
 
   if (error.code === '22P02' || combined.toLowerCase().includes('invalid input syntax for type uuid')) {
-    return 'One of the cart products is invalid. Please remove it and add it again.'
+    return 'في منتج في السلة مش صحيح. Please remove it and add it again.'
   }
 
-  return 'We could not place your order right now. Please try again.'
+  return 'معرفناش نأكد الطلب دلوقتي. حاول تاني.'
 }
 
 export async function POST(request: Request) {
@@ -74,7 +74,7 @@ export async function POST(request: Request) {
 
     if (cartItems.length === 0) {
       console.warn('Order rejected before RPC: empty cart', logPayload)
-      return NextResponse.json({ error: 'Your cart is empty.' }, { status: 400 })
+      return NextResponse.json({ error: 'سلتك فاضية.' }, { status: 400 })
     }
 
     const supabase = createClient()
@@ -120,6 +120,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ order: data })
   } catch (error) {
     console.error('Order API error:', error)
-    return NextResponse.json({ error: 'Network or server error. Please try again.' }, { status: 500 })
+    return NextResponse.json({ error: 'في مشكلة في الاتصال. حاول تاني.' }, { status: 500 })
   }
 }

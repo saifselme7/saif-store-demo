@@ -56,7 +56,7 @@ export function CategoryListManager({
   const handleSuccess = async () => {
     setFeedback({
       type: 'success',
-      message: categoryToEdit ? 'Category updated successfully!' : 'Category created successfully!',
+      message: categoryToEdit ? 'اتعدل القسم بنجاح!' : 'اتضاف القسم بنجاح!',
     })
     // Re-fetch categories
     const { data: updatedCategories } = await supabase
@@ -87,7 +87,7 @@ export function CategoryListManager({
       setCategories((prev) => prev.filter((c) => c.id !== categoryToDelete.id))
       setFeedback({
         type: 'success',
-        message: `Category "${categoryToDelete.name}" deleted successfully.`,
+        message: `Category "${categoryToDelete.name}" اتحذف بنجاح.`,
       })
       setCategoryToDelete(null)
       router.refresh()
@@ -95,7 +95,7 @@ export function CategoryListManager({
       console.error('Delete category error:', err)
       setFeedback({
         type: 'error',
-        message: err.message || 'Failed to delete category.',
+        message: err.message || 'معرفناش نحذف القسم.',
       })
     } finally {
       setIsDeleting(false)
@@ -136,7 +136,7 @@ export function CategoryListManager({
       {/* Top action bar */}
       <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between">
         <div>
-          <h3 className="font-bold text-slate-900 text-base">Menu Categories</h3>
+          <h3 className="font-bold text-slate-900 text-base">أقسام المتجر</h3>
           <p className="text-xs text-slate-500 mt-0.5">
             Total {categories.length} categories configured in database
           </p>
@@ -144,10 +144,10 @@ export function CategoryListManager({
 
         <button
           onClick={handleOpenCreate}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs sm:text-sm transition-all shadow-sm shadow-amber-500/20"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-neutral-500 hover:bg-neutral-400 text-slate-950 font-bold text-xs sm:text-sm transition-all shadow-sm shadow-neutral-500/20"
         >
           <PlusCircle className="w-4 h-4" />
-          <span>New Category</span>
+          <span>قسم جديد</span>
         </button>
       </div>
 
@@ -157,11 +157,11 @@ export function CategoryListManager({
           <table className="w-full text-left text-sm text-slate-600">
             <thead className="bg-slate-50/75 text-[11px] uppercase tracking-wider text-slate-500 font-bold border-b border-slate-100">
               <tr>
-                <th scope="col" className="px-6 py-3.5">Category</th>
-                <th scope="col" className="px-6 py-3.5">Slug</th>
-                <th scope="col" className="px-6 py-3.5">Description</th>
-                <th scope="col" className="px-6 py-3.5">Date Created</th>
-                <th scope="col" className="px-6 py-3.5 text-right">Actions</th>
+                <th scope="col" className="px-6 py-3.5">القسم</th>
+                <th scope="col" className="px-6 py-3.5">الرابط</th>
+                <th scope="col" className="px-6 py-3.5">الوصف</th>
+                <th scope="col" className="px-6 py-3.5">تاريخ الإضافة</th>
+                <th scope="col" className="px-6 py-3.5 text-right">إجراءات</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -184,7 +184,7 @@ export function CategoryListManager({
                         </span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 font-mono text-xs text-amber-700 bg-amber-50/40 w-fit rounded-lg">
+                    <td className="px-6 py-4 font-mono text-xs text-neutral-700 bg-neutral-50/40 w-fit rounded-lg">
                       /{cat.slug}
                     </td>
                     <td className="px-6 py-4 text-xs text-slate-500 max-w-xs truncate">
@@ -198,7 +198,7 @@ export function CategoryListManager({
                         <Link
                           href={`/categories/${cat.slug}`}
                           target="_blank"
-                          title="View on store"
+                          title="عرض في المتجر"
                           className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
                         >
                           <ExternalLink className="w-4 h-4" />
@@ -207,8 +207,8 @@ export function CategoryListManager({
                         <button
                           type="button"
                           onClick={() => handleOpenEdit(cat)}
-                          title="Edit category"
-                          className="p-1.5 text-amber-600 hover:text-amber-700 hover:bg-amber-50 rounded-lg transition-colors"
+                          title="تعديل القسم"
+                          className="p-1.5 text-neutral-600 hover:text-neutral-700 hover:bg-neutral-50 rounded-lg transition-colors"
                         >
                           <Edit className="w-4 h-4" />
                         </button>
@@ -216,7 +216,7 @@ export function CategoryListManager({
                         <button
                           type="button"
                           onClick={() => setCategoryToDelete(cat)}
-                          title="Delete category"
+                          title="حذف القسم"
                           className="p-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -250,7 +250,7 @@ export function CategoryListManager({
         isOpen={Boolean(categoryToDelete)}
         onClose={() => setCategoryToDelete(null)}
         onConfirm={handleDeleteCategory}
-        title="Confirm Category Deletion"
+        title="تأكيد حذف القسم"
         message="Are you sure you want to permanently delete this category? Associated products may become uncategorized."
         itemName={categoryToDelete?.name}
         isLoading={isDeleting}
