@@ -20,8 +20,8 @@ export default async function AdminCategoriesPage() {
   return (
     <div className="flex-1 flex flex-col">
       <AdminHeader
-        title="Categories Management"
-        description="Create, update, and manage product menu categories."
+        title="إدارة الأقسام"
+        description="ضيف وعدّل ونظّم أقسام المنتجات في المتجر."
       />
 
       <div className="p-6 sm:p-8 max-w-7xl w-full">

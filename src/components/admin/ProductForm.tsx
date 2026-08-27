@@ -184,7 +184,7 @@ export function ProductForm({
         <div className="p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm flex items-start gap-3">
           <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
           <div>
-            <p className="font-bold">Error saving product</p>
+            <p className="font-bold">مشكلة في حفظ المنتج</p>
             <p className="text-xs mt-0.5">{errorMessage}</p>
           </div>
         </div>
@@ -205,18 +205,18 @@ export function ProductForm({
               General Information
             </h3>
 
-            {/* Product Name */}
+            {/* اسم المنتج */}
             <div className="space-y-1.5">
               <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
-                Product Name <span className="text-red-500">*</span>
+                اسم المنتج <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
                 value={name}
                 onChange={handleNameChange}
-                placeholder="e.g. Italian Caffè Latte"
+                placeholder="مثال: لاتيه إيطالي"
                 required
-                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-sm bg-slate-50/50"
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500 text-sm bg-slate-50/50"
               />
             </div>
 
@@ -235,7 +235,7 @@ export function ProductForm({
                   onChange={(e) => setSlug(slugify(e.target.value))}
                   placeholder="italian-caffe-latte"
                   required
-                  className="w-full px-3 py-2.5 rounded-r-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-sm bg-slate-50/50 font-mono"
+                  className="w-full px-3 py-2.5 rounded-r-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500 text-sm bg-slate-50/50 font-mono"
                 />
               </div>
             </div>
@@ -249,8 +249,8 @@ export function ProductForm({
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 rows={4}
-                placeholder="Enter rich flavor notes, ingredients, preparation style..."
-                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-sm bg-slate-50/50 leading-relaxed"
+                placeholder="اكتب الوصف والمكونات وطريقة التحضير..."
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500 text-sm bg-slate-50/50 leading-relaxed"
               />
             </div>
           </div>
@@ -265,7 +265,7 @@ export function ProductForm({
               {/* Price in EGP */}
               <div className="space-y-1.5">
                 <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
-                  Price (EGP) <span className="text-red-500">*</span>
+                  السعر (جنيه) <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
                   <input
@@ -276,7 +276,7 @@ export function ProductForm({
                     onChange={(e) => setPrice(e.target.value)}
                     placeholder="120.00"
                     required
-                    className="w-full pl-4 pr-14 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-sm bg-slate-50/50 font-semibold"
+                    className="w-full pl-4 pr-14 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500 text-sm bg-slate-50/50 font-semibold"
                   />
                   <div className="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">
                     EGP
@@ -292,9 +292,9 @@ export function ProductForm({
                 <select
                   value={categoryId}
                   onChange={(e) => setCategoryId(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-sm bg-slate-50/50"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500 text-sm bg-slate-50/50"
                 >
-                  <option value="">Select a Category</option>
+                  <option value="">اختار القسم</option>
                   {categories.map((cat) => (
                     <option key={cat.id} value={cat.id}>
                       {cat.name}
@@ -344,7 +344,7 @@ export function ProductForm({
           {/* Product Media & Supabase Storage */}
           <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
             <h3 className="font-bold text-slate-900 text-base border-b border-slate-100 pb-3">
-              Product Image
+              صورة المنتج
             </h3>
 
             {/* Preview */}
@@ -360,7 +360,7 @@ export function ProductForm({
                   type="button"
                   onClick={() => setImageUrl('')}
                   className="absolute top-2 right-2 p-1.5 bg-black/70 hover:bg-black text-white rounded-lg transition-colors"
-                  title="Remove image"
+                  title="شيل الصورة"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -368,8 +368,8 @@ export function ProductForm({
             ) : (
               <div className="aspect-[4/3] rounded-xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center p-4 text-center bg-slate-50/50">
                 <ImageIcon className="w-10 h-10 text-slate-300 mb-2" />
-                <p className="text-xs font-semibold text-slate-600">No Image Uploaded</p>
-                <p className="text-[11px] text-slate-400 mt-0.5">Upload a file or enter a direct image URL</p>
+                <p className="text-xs font-semibold text-slate-600">مفيش صورة مرفوعة</p>
+                <p className="text-[11px] text-slate-400 mt-0.5">ارفع صورة أو اكتب رابط مباشر</p>
               </div>
             )}
 
@@ -380,9 +380,9 @@ export function ProductForm({
               </label>
               <label className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 cursor-pointer text-xs font-semibold text-slate-700 transition-colors">
                 {uploadingImage ? (
-                  <Loader2 className="w-4 h-4 animate-spin text-amber-600" />
+                  <Loader2 className="w-4 h-4 animate-spin text-neutral-600" />
                 ) : (
-                  <UploadCloud className="w-4 h-4 text-amber-600" />
+                  <UploadCloud className="w-4 h-4 text-neutral-600" />
                 )}
                 <span>{uploadingImage ? 'Uploading to Bucket...' : 'Select Local Image'}</span>
                 <input
@@ -405,7 +405,7 @@ export function ProductForm({
                 value={imageUrl}
                 onChange={(e) => setImageUrl(e.target.value)}
                 placeholder="https://images.unsplash.com/..."
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500 text-xs bg-slate-50/50"
+                className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-neutral-500 text-xs bg-slate-50/50"
               />
             </div>
           </div>
@@ -415,15 +415,15 @@ export function ProductForm({
             <button
               type="submit"
               disabled={isSubmitting || uploadingImage}
-              className="w-full flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-sm shadow-md shadow-amber-600/20 transition-all disabled:opacity-50"
+              className="w-full flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-neutral-600 hover:bg-neutral-700 text-white font-bold text-sm shadow-md shadow-neutral-600/20 transition-all disabled:opacity-50"
             >
               {isSubmitting ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin" />
-                  <span>Saving to Database...</span>
+                  <span>بيتحفظ في الداتابيز...</span>
                 </>
               ) : (
-                <span>{isEditing ? 'Save Product Changes' : 'Publish Product to Store'}</span>
+                <span>{isEditing ? 'حفظ المنتج Changes' : 'Publish Product to Store'}</span>
               )}
             </button>
 

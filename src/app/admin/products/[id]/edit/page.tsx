@@ -49,7 +49,7 @@ export default async function EditProductPage({ params }: EditProductPageProps) 
             className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 bg-white hover:bg-slate-50 border border-slate-200 px-3.5 py-2 rounded-xl transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span>Back to Inventory</span>
+            <span>رجوع للمنتجات</span>
           </Link>
         }
       />
